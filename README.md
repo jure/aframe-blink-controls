@@ -1,4 +1,4 @@
-![Blink controls](https://github.com/jure/aframe-blink-controls/raw/main/blink-logo.svg)
+<img src="https://github.com/jure/aframe-blink-controls/raw/main/blink-logo.png" alt="Blink controls" width="337">
 
 # aframe-blink-controls
 
