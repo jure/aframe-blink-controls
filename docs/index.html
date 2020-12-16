@@ -12,58 +12,47 @@
         font-size: 20px;
         padding: 10px 20px;
       }
-      h1 {
-        /* font-weight: 300; */
-      }
       a {
         color: #fdf6e3;
-        display: block;
         padding: 15px 0;
+      }
+      p { 
+        max-width: 80em;
       }
       img {
         max-width: 320px;
       }
-      ul {
-        display: flex;
-        list-style: none;
-        flex-wrap: wrap;
-        padding: 5px 0 0;
-      }
-      ul li {
-        margin-right: 30px;
-        padding: 5px 0 30px;
-      }
-      ul a {
-        background-size: cover;
-        display: block;
-        padding: 0;
-        height: 320px;
-        width: 320px;
-      }
-      ul h3,
-      ul p {
-        max-width: 320px;
+      body { 
+        max-width: 50em;
+        margin: 0 auto;
+        text-align: center;
       }
     </style>
   </head>
   <body>
     <h1>aframe-blink-controls component</h1>
+    <p>A blink (teleport) component for <a href="https://aframe.io/docs/1.1.0/introduction/">A-Frame</a>, based on
+    <a href="https://github.com/fernandojsg/aframe-teleport-controls">@fernandojsg's aframe-teleport-controls</a> but
+    with added support for rotation & <a href="https://github.com/jure/aframe-blink-controls#aframe-blink-controls">additional fixes</a>.</p>   
     <p>Warning: This is a WIP teleport with rotation component. Currently only tested with the Oculus Quest 1.</p>
-    <ul>
-      <li>
-        <a href="basic/" style="background-image: url(shots/basic.jpg)"></a>
-        <h3>Basic</h3>
-        <p>This is a basic example.</p>
-      </li>
-    </ul>
-    
-    <ul>
-      <li>
-        <a href="simple/" style="background-image: url(shots/mesh.jpg)"></a>
-        <h3>Mesh</h3>
-        <p>This is an example with a mesh for collision.</p>
-      </li>
-    </ul>
+    <section>
+      <h3>Usage</h3>
+      Detailed instructions can be found in the <a href="https://github.com/jure/aframe-blink-controls#aframe-blink-controls">README</a>.
+    </section>
+    <section>
+      <h3>Basic example</h3>
+      <a href="basic/">
+      <img src="shots/basic.jpg" />
+      <p>This is a basic example.</p>
+    </a>
+    </section>
+    <section>
+      <h3>Mesh collision example</h3>
+      <a href="mesh/">
+      <img src="shots/mesh.jpg" />
+      <p>This is an example with a mesh for collision.</p>
+      </a>
+    </section>
 
     <!-- GitHub Corner. -->
     <a href="https://github.com/jure/aframe-blink-controls" class="github-corner">

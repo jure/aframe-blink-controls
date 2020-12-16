@@ -23,13 +23,6 @@
 				<a-asset-item id="Circle" src="./assets/Circle.gltf"></a-asset-item>
 				<a-asset-item id="Circle001" src="./assets/Circle.001.gltf"></a-asset-item>
 				<a-asset-item id="Cube" src="./assets/Cube.gltf"></a-asset-item>
-                <img id="sky"                 src="./resources/sky.jpg">
-                <img id="icon-play"           src="./resources/play.png">
-                <img id="icon-pause"          src="./resources/pause.png">
-                <img id="icon-play-skip-back" src="./resources/play-skip-back.png">
-                <img id="icon-mute"           src="./resources/mute.png">
-                <img id="icon-volume-low"     src="./resources/volume-low.png">
-                <img id="icon-volume-high"    src="./resources/volume-high.png">
             </a-assets>
 
             <!-- Entities -->
@@ -44,7 +37,7 @@
             >
                 <a-entity id="camera" 
                     camera="near: 0.001; far: 1000;" 
-                    position="0 1.7 0" 
+                    position="0 1.7 0"
                     look-controls="pointerLockEnabled: true">
                         <a-entity id="cursor" cursor="fuse: false;" animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 50; from: 	0.1 0.1 0.1; to: 1 1 1"
                             position="0 0 -0.1"
