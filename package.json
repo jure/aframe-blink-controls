@@ -1,73 +1,44 @@
 {
-  "name": "aframe-teleport-controls",
-  "version": "0.3.2",
-  "description": "A Teleport Controls component for A-Frame.",
-  "main": "index.js",
-  "unpkg": "dist/aframe-teleport-controls.min.js",
+  "name": "aframe-blink-controls",
+  "version": "0.0.1",
+  "description": "Blink controls component for A-Frame.",
+  "main": "src/index.js",
+  "unpkg": "dist/aframe-blink-controls.min.js",
   "scripts": {
-    "dev": "budo index.js:dist/aframe-teleport-controls.min.js --port 7000 --live --open --ssl",
-    "dist": "webpack index.js dist/aframe-teleport-controls.js && webpack -p index.js dist/aframe-teleport-controls.min.js",
-    "lint": "semistandard -v | snazzy",
+    "dev": "webpack-dev-server --disable-host-check --mode development",
+    "watch": "webpack --mode development --output-filename aframe-blink-controls.js --watch",
+    "dist": "webpack --mode development --output-filename aframe-blink-controls.js && webpack -p --output-filename aframe-blink-controls.min.js && cp dist/aframe-blink-controls.js docs/dist/",
+    "lint": "eslint src/",
     "prepublish": "npm run dist",
-    "ghpages": "ghpages",
-    "start": "npm run dev",
-    "test": "karma start ./tests/karma.conf.js",
-    "test:firefox": "karma start ./tests/karma.conf.js --browsers Firefox",
-    "test:chrome": "karma start ./tests/karma.conf.js --browsers Chrome"
+    "start": "npm run dev"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fernandojsg/aframe-teleport-controls.git"
+    "url": "git+https://github.com/jure/aframe-blink-controls.git"
   },
   "keywords": [
     "aframe",
     "aframe-component",
     "aframe-vr",
     "vr",
-    "mozvr",
-    "webvr",
-    "teleport-controls"
+    "webxr",
+    "blink-controls"
   ],
-  "author": "Fernando Serrano <fernandojsg@gmail.com>",
+  "author": "Jure Triglav, Fernando Serrano (original author of aframe-teleport-controls)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fernandojsg/aframe-teleport-controls/issues"
+    "url": "https://github.com/jure/aframe-blink-controls/issues"
   },
-  "homepage": "https://github.com/fernandojsg/aframe-teleport-controls#readme",
+  "homepage": "https://github.com/jure/aframe-blink-controls#readme",
   "devDependencies": {
-    "aframe": "^1.0.4",
-    "browserify": "^13.0.0",
-    "budo": "^11.6.3",
-    "chai": "^3.4.1",
-    "chai-shallow-deep-equal": "^1.3.0",
-    "ghpages": "^0.0.8",
-    "karma": "^0.13.15",
-    "karma-browserify": "^4.4.2",
-    "karma-chai-shallow-deep-equal": "0.0.4",
-    "karma-chrome-launcher": "2.0.0",
-    "karma-env-preprocessor": "^0.1.1",
-    "karma-firefox-launcher": "^0.1.7",
-    "karma-mocha": "^0.2.1",
-    "karma-mocha-reporter": "^1.1.3",
-    "karma-sinon-chai": "^1.3.4",
-    "mocha": "^2.3.4",
-    "randomcolor": "^0.4.4",
-    "semistandard": "^8.0.0",
-    "shelljs": "^0.7.0",
-    "shx": "^0.1.1",
-    "sinon": "^1.17.5",
-    "sinon-chai": "^2.8.0",
-    "snazzy": "^4.0.0",
-    "webpack": "^1.13.0"
-  },
-  "semistandard": {
-    "globals": [
-      "AFRAME",
-      "THREE"
-    ],
-    "ignore": [
-      "examples/build.js",
-      "dist/**"
-    ]
+    "aframe": "^1.1.0",
+    "eslint": "^7.15.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "webpack": "^4.0.0",
+    "webpack-cli": "^3.0.0",
+    "webpack-dev-server": "^3.0.0"
   }
 }

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>WebXR Application</title>
+        <link rel="icon" type="image/png" href="favicon.ico"/>
+        <meta name="description" content="3D Application">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://aframe.io/releases/1.1.0/aframe.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+        <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
+        <script type="text/javascript" src="js/webxr.js"></script>
+        <script type="text/javascript" src="js/joystick.js"></script>
+        <script type="text/javascript" src="js/camera-cube-env.js"></script>
+        <script type="text/javascript" src="../dist/aframe-blink-controls.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body onload="init();">
+        <a-scene renderer="colorManagement: true; logarithmicDepthBuffer: true;"   shadow="type: basic; autoUpdate: false;">
+            <!-- Assets -->
+            <a-assets>
+				<a-asset-item id="Circle" src="./assets/Circle.gltf"></a-asset-item>
+				<a-asset-item id="Circle001" src="./assets/Circle.001.gltf"></a-asset-item>
+				<a-asset-item id="Cube" src="./assets/Cube.gltf"></a-asset-item>
+                <img id="sky"                 src="./resources/sky.jpg">
+                <img id="icon-play"           src="./resources/play.png">
+                <img id="icon-pause"          src="./resources/pause.png">
+                <img id="icon-play-skip-back" src="./resources/play-skip-back.png">
+                <img id="icon-mute"           src="./resources/mute.png">
+                <img id="icon-volume-low"     src="./resources/volume-low.png">
+                <img id="icon-volume-high"    src="./resources/volume-high.png">
+            </a-assets>
+
+            <!-- Entities -->
+            <a-entity environment="skyType: atmosphere; lightPosition: 0.4 2.5 1.9; ground: none; lighting: none;"></a-entity>
+			<a-entity id="CircleEntity" light-map-geometry="path: lightmaps/Circle_baked.png; intensity: 1.0" gltf-model="#Circle" scale="1 1 1" position="-2.5664781787781976e-05 0.01489312294870615 1.3361096534936223e-05" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="Circle001Entity" light-map-geometry="path: lightmaps/Circle.001_baked.png; intensity: 1.0" gltf-model="#Circle001" scale="1 1 1" position="-2.2980062567512505e-05 -3.0919909477233887e-07 1.2401279491314199e-05" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="CubeEntity" light-map-geometry="path: lightmaps/Cube_baked.png; intensity: 1.0" gltf-model="#Cube" scale="1 1 1" position="-0.012803194113075733 14.953046798706055 -0.783664882183075" visible="true" shadow="cast: false" ></a-entity>
+
+            <!-- Camera -->
+            <a-entity id="player" 
+                position="0 -0.2 4" 
+            >
+                <a-entity id="camera" 
+                    camera="near: 0.001; far: 1000;" 
+                    position="0 1.7 0" 
+                    look-controls="pointerLockEnabled: true">
+                        <a-entity id="cursor" cursor="fuse: false;" animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 50; from: 	0.1 0.1 0.1; to: 1 1 1"
+                            position="0 0 -0.1"
+                            geometry="primitive: circle; radius: 0.001;"
+                            material="color: #CCC; shader: flat;"
+                            >
+                        </a-entity>
+                </a-entity>
+                    <a-entity id="leftHand" oculus-touch-controls="hand: left" blink-controls="cameraRig: #player; teleportOrigin: #camera; button: thumbstick; startEvents: thumbstickdown; endEvents: thumbstickup; collisionEntities: #CubeEntity, #Circle001Entity;" vive-controls="hand: left"></a-entity>
+					<a-entity id="rightHand"  oculus-touch-controls="hand: right" vive-controls="hand: right" ></a-entity>
+            </a-entity>
+            <!-- Lights -->
+            <a-entity light="intensity: 0.0; castShadow: false;"></a-entity>
+            <a-entity light="type: ambient; intensity: 0.0"></a-entity>
+        </a-scene>
+    </body>
+</html>
