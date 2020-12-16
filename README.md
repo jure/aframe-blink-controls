@@ -2,6 +2,8 @@
 
 # aframe-blink-controls
 
+[Video demo](https://twitter.com/JureTriglav/status/1339199724520435718?s=20)
+
 This component adds teleport with rotation to A-Frame applications! It's a modified version of the [`aframe-teleport-controls`](https://github.com/fernandojsg/aframe-teleport-controls) component by @fernandojsg, and the main changes are: added support for rotation, removed line teleport option, added support for thumbsticks, calculation of parabolic roots for accurate longer teleport rays. This is a work in progress to support an experimental project and currently the only tested device is a first generation Oculus Quest. It should work on the second generation Oculus Quest as well, as the events are the same, though support for HTC Vive or Valve Index controllers is only theoretical/untested, as I don't have a way of testing it. PRs welcome!
 
 <img src="https://github.com/jure/aframe-blink-controls/raw/main/docs/shots/mesh.jpg" width="500" alt="Screenshot">
