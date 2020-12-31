@@ -125,18 +125,35 @@ AFRAME.registerComponent('blink-controls', {
 
     this.queryCollisionEntities()
   },
-
+  snapturn: function(evt) {
+    const x = evt.detail.x;
+    if (x == 0) snapTurned = false;
+    if (snapTurned) return;
+    // left
+    if (x < -0.95) {
+      this.cameraRig.object3D.rotation.y += 45;
+      snapTurned = true;
+    }
+    // right
+    if (x > 0.95) {
+      this.cameraRig.object3D.rotation.y += -45;
+      snapTurned = true;
+    }
+  },
   updateDirection: function (evt) {
     // console.log('Y (up is -):', evt.detail.y)
     // console.log('X (left is -):', evt.detail.x)
-
-    if (evt.detail.x && evt.detail.y) {
-      const rotation = Math.atan2(evt.detail.x, evt.detail.y) + Math.PI
-      this.obj.getWorldPosition(this.controllerPosition)
-      this.controllerPosition.setComponent(1, this.hitEntity.object3D.position.y)
-      this.hitEntity.object3D.lookAt(this.controllerPosition)
-      this.hitEntity.object3D.rotateY(rotation)
-      this.hitEntity.object3D.getWorldQuaternion(this.hitEntityQuaternion)
+    if(this.active) {
+      if (evt.detail.x && evt.detail.y) {
+        const rotation = Math.atan2(evt.detail.x, evt.detail.y) + Math.PI
+        this.obj.getWorldPosition(this.controllerPosition)
+        this.controllerPosition.setComponent(1, this.hitEntity.object3D.position.y)
+        this.hitEntity.object3D.lookAt(this.controllerPosition)
+        this.hitEntity.object3D.rotateY(rotation)
+        this.hitEntity.object3D.getWorldQuaternion(this.hitEntityQuaternion)
+      }
+    } else {
+      this.snapturn(evt);
     }
   },
   update: function (oldData) {
