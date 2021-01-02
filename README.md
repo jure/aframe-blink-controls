@@ -75,6 +75,10 @@ Then require it: this will register the component globally.
 require('aframe-blink-controls');
 ```
 
+### Development
+
+Use `npm run dev` to run a development build with a number of provided examples on https://localhost:8080 (or alternatively your computer's IP on your network, e.g. for testing on standalone devices).
+
 ### Events
 
 | Event      | Properties of `event.detail`             | Description                      |
