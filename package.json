@@ -6,8 +6,7 @@
   "unpkg": "dist/aframe-blink-controls.min.js",
   "scripts": {
     "dev": "webpack-dev-server --disable-host-check --mode development",
-    "watch": "webpack --mode development --output-filename aframe-blink-controls.js --watch",
-    "dist": "webpack --mode development --output-filename aframe-blink-controls.js && webpack -p --output-filename aframe-blink-controls.min.js && cp dist/aframe-blink-controls.js docs/dist/",
+    "dist": "webpack -p",
     "lint": "eslint src/",
     "prepublish": "npm run dist",
     "start": "npm run dev"
@@ -22,7 +21,8 @@
     "aframe-vr",
     "vr",
     "webxr",
-    "blink-controls"
+    "blink-controls",
+    "teleport"
   ],
   "author": "Jure Triglav, Fernando Serrano (original author of aframe-teleport-controls)",
   "license": "MIT",
