@@ -56,7 +56,7 @@ AFRAME.registerComponent('blink-controls', {
     hitCylinderRadius: { default: 0.25, min: 0 },
     hitCylinderHeight: { default: 0.3, min: 0 },
     interval: { default: 0 },
-    curveNumberPoints: { default: 50, min: 2 },
+    curveNumberPoints: { default: 60, min: 2 },
     curveLineWidth: { default: 0.025 },
     curveHitColor: { type: 'color', default: '#4d93fd' },
     curveMissColor: { type: 'color', default: '#ff0000' },
@@ -65,9 +65,10 @@ AFRAME.registerComponent('blink-controls', {
     landingNormal: { type: 'vec3', default: { x: 0, y: 1, z: 0 } },
     landingMaxAngle: { default: '45', min: 0, max: 360 },
     drawIncrementally: { default: true },
-    incrementalDrawMs: { default: 500 },
+    incrementalDrawMs: { default: 300 },
     missOpacity: { default: 0.8 },
-    hitOpacity: { default: 0.8 }
+    hitOpacity: { default: 0.8 },
+    snapTurn: { default: true }
   },
 
   init: function () {
@@ -135,16 +136,24 @@ AFRAME.registerComponent('blink-controls', {
     el.addEventListener('thumbstickmoved', this.handleThumbstickAxis)
     this.queryCollisionEntities()
   },
-  handleSnapturn: function (evt) {
-    const x = evt.detail.x
-    if (Math.abs(x) < 0.50) this.canSnapturn = true
+  handleSnapturn: function (rotation, strength) {
+    if (strength < 0.50) this.canSnapturn = true
     if (!this.canSnapturn) return
     // Only do snapturns if axis is very prominent (user intent is clear)
     // And preven further snapturns until axis returns to (close enough to) 0
-    if (x < -0.95 || x > 0.95) {
-      this.cameraRig.object3D.rotateY(-Math.sign(x) * this.snapturnRotation)
-      this.canSnapturn = false
+    if (strength > 0.95) {
+      if (Math.abs(rotation - Math.PI / 2.0) < 0.6) {
+        this.cameraRig.object3D.rotateY(+this.snapturnRotation)
+        this.canSnapturn = false
+      } else if (Math.abs(rotation - 1.5 * Math.PI) < 0.6) {
+        this.cameraRig.object3D.rotateY(-this.snapturnRotation)
+        this.canSnapturn = false
+      }
     }
+    // if (rotation ) {
+    //   this.cameraRig.object3D.rotateY(-Math.sign(x) * this.snapturnRotation)
+    //   this.canSnapturn = false
+    // }
   },
   handleThumbstickAxis: function (evt) {
     if (evt.detail.x !== undefined && evt.detail.y !== undefined) {
@@ -154,14 +163,13 @@ AFRAME.registerComponent('blink-controls', {
       if (this.active) {
         // Only rotate if the axes are sufficiently prominent,
         // to prevent rotating in undesired/fluctuating directions.
-        if (strength > 0.7) {
+        if (strength > 0.95) {
           this.obj.getWorldPosition(this.controllerPosition)
           this.controllerPosition.setComponent(1, this.hitEntity.object3D.position.y)
           this.hitEntity.object3D.lookAt(this.controllerPosition)
           this.hitEntity.object3D.rotateY(rotation)
           this.hitEntity.object3D.getWorldQuaternion(this.hitEntityQuaternion)
         }
-
         if (Math.abs(evt.detail.x) === 0 && Math.abs(evt.detail.y) === 0) {
           // Disable teleport on axis return to 0 if axis (de)activation is enabled
           this.onButtonUp()
@@ -170,11 +178,11 @@ AFRAME.registerComponent('blink-controls', {
         // We use half a radian left and right for some leeway
         // We also check for significant y axis movement to prevent
         // accidental teleports
-      } else if (this.thumbstickAxisActivation && strength > 0.8 && (rotation < 0.85 || rotation > 5.43)) {
+      } else if (this.thumbstickAxisActivation && strength > 0.95 && (rotation < 0.50 || rotation > 5.78)) {
         // Activate (fuzzily) on forward axis if axis activation is enabled
         this.onButtonDown()
-      } else {
-        this.handleSnapturn(evt)
+      } else if (this.data.snapTurn) {
+        this.handleSnapturn(rotation, strength)
       }
     }
   },
@@ -270,7 +278,13 @@ AFRAME.registerComponent('blink-controls', {
 
       // Set default status as non-hit
       this.teleportEntity.setAttribute('visible', true)
-      this.line.material.color.set(this.curveMissColor)
+
+      // But use hit color until ray animation finishes
+      if (timeSinceDrawStart < this.data.incrementalDrawMs) {
+        this.line.material.color.set(this.curveHitColor)
+      } else {
+        this.line.material.color.set(this.curveMissColor)
+      }
       this.line.material.opacity = this.data.missOpacity
       this.line.material.transparent = this.data.missOpacity < 1
       this.hitEntity.setAttribute('visible', false)
