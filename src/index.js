@@ -39,9 +39,15 @@ if (typeof AFRAME === 'undefined') {
 
 AFRAME.registerComponent('blink-controls', {
   schema: {
-    button: { default: 'thumbstick', oneOf: ['trackpad', 'trigger', 'grip', 'menu', 'thumbstick'] },
-    startEvents: { type: 'array', default: ['thumbstickdown', 'trackpaddown'] },
-    endEvents: { type: 'array', default: ['thumbstickup', 'trackpadup'] },
+    // Button is a simplified startEvents & endEvents specification, e.g.
+    // 'thumbstick' binds 'thumbstickdown' and 'thumbstickup' respectively
+    button: { default: '', oneOf: ['trackpad', 'trigger', 'grip', 'menu', 'thumbstick'] },
+    // The default teleport activation is a forward thumbstick axis,
+    // but this can be changed with startEvents.
+    startEvents: { type: 'array', default: [] },
+    // The default teleport de-activation is a centered thumbstick axis,
+    // but this can be changed with endEvents.
+    endEvents: { type: 'array', default: [] },
     collisionEntities: { default: '' },
     hitEntity: { type: 'selector' },
     cameraRig: { type: 'selector', default: '#player' },
@@ -101,11 +107,15 @@ AFRAME.registerComponent('blink-controls', {
 
     this.onButtonDown = this.onButtonDown.bind(this)
     this.onButtonUp = this.onButtonUp.bind(this)
-    this.updateDirection = this.updateDirection.bind(this)
+    this.handleThumbstickAxis = this.handleThumbstickAxis.bind(this)
 
     this.teleportOrigin = this.data.teleportOrigin
     this.cameraRig = this.data.cameraRig
 
+    this.snapturnRotation = THREE.MathUtils.degToRad(45)
+    this.canSnapturn = true
+
+    // Are startEvents and endEvents specified?
     if (this.data.startEvents.length && this.data.endEvents.length) {
       for (i = 0; i < this.data.startEvents.length; i++) {
         el.addEventListener(this.data.startEvents[i], this.onButtonDown)
@@ -113,47 +123,59 @@ AFRAME.registerComponent('blink-controls', {
       for (i = 0; i < this.data.endEvents.length; i++) {
         el.addEventListener(this.data.endEvents[i], this.onButtonUp)
       }
-    } else {
+    // Is a button for activation specified?
+    } else if (data.button) {
       el.addEventListener(data.button + 'down', this.onButtonDown)
       el.addEventListener(data.button + 'up', this.onButtonUp)
+    // If none of the above, default to thumbstick-axis based activation
+    } else {
+      this.thumbstickAxisActivation = true
     }
 
-    // Special case for thumbstickmoved (on Oculus Touch)
-    if (this.data.startEvents && this.data.startEvents.includes('thumbstickdown')) {
-      el.addEventListener('thumbstickmoved', this.updateDirection)
-    }
-
+    el.addEventListener('thumbstickmoved', this.handleThumbstickAxis)
     this.queryCollisionEntities()
   },
-  snapturn: function(evt) {
-    const x = evt.detail.x;
-    if (x == 0) snapTurned = false;
-    if (snapTurned) return;
-    // left
-    if (x < -0.95) {
-      this.cameraRig.object3D.rotation.y += 45;
-      snapTurned = true;
-    }
-    // right
-    if (x > 0.95) {
-      this.cameraRig.object3D.rotation.y += -45;
-      snapTurned = true;
+  handleSnapturn: function (evt) {
+    const x = evt.detail.x
+    if (Math.abs(x) < 0.50) this.canSnapturn = true
+    if (!this.canSnapturn) return
+    // Only do snapturns if axis is very prominent (user intent is clear)
+    // And preven further snapturns until axis returns to (close enough to) 0
+    if (x < -0.95 || x > 0.95) {
+      this.cameraRig.object3D.rotateY(-Math.sign(x) * this.snapturnRotation)
+      this.canSnapturn = false
     }
   },
-  updateDirection: function (evt) {
-    // console.log('Y (up is -):', evt.detail.y)
-    // console.log('X (left is -):', evt.detail.x)
-    if(this.active) {
-      if (evt.detail.x && evt.detail.y) {
-        const rotation = Math.atan2(evt.detail.x, evt.detail.y) + Math.PI
-        this.obj.getWorldPosition(this.controllerPosition)
-        this.controllerPosition.setComponent(1, this.hitEntity.object3D.position.y)
-        this.hitEntity.object3D.lookAt(this.controllerPosition)
-        this.hitEntity.object3D.rotateY(rotation)
-        this.hitEntity.object3D.getWorldQuaternion(this.hitEntityQuaternion)
+  handleThumbstickAxis: function (evt) {
+    if (evt.detail.x !== undefined && evt.detail.y !== undefined) {
+      const rotation = Math.atan2(evt.detail.x, evt.detail.y) + Math.PI
+      const strength = Math.sqrt(evt.detail.x ** 2 + evt.detail.y ** 2)
+
+      if (this.active) {
+        // Only rotate if the axes are sufficiently prominent,
+        // to prevent rotating in undesired/fluctuating directions.
+        if (strength > 0.7) {
+          this.obj.getWorldPosition(this.controllerPosition)
+          this.controllerPosition.setComponent(1, this.hitEntity.object3D.position.y)
+          this.hitEntity.object3D.lookAt(this.controllerPosition)
+          this.hitEntity.object3D.rotateY(rotation)
+          this.hitEntity.object3D.getWorldQuaternion(this.hitEntityQuaternion)
+        }
+
+        if (Math.abs(evt.detail.x) === 0 && Math.abs(evt.detail.y) === 0) {
+          // Disable teleport on axis return to 0 if axis (de)activation is enabled
+          this.onButtonUp()
+        }
+        // Forward (rotation 0.0 || 6.28 is straight ahead)
+        // We use half a radian left and right for some leeway
+        // We also check for significant y axis movement to prevent
+        // accidental teleports
+      } else if (this.thumbstickAxisActivation && strength > 0.8 && (rotation < 0.85 || rotation > 5.43)) {
+        // Activate (fuzzily) on forward axis if axis activation is enabled
+        this.onButtonDown()
+      } else {
+        this.handleSnapturn(evt)
       }
-    } else {
-      this.snapturn(evt);
     }
   },
   update: function (oldData) {
