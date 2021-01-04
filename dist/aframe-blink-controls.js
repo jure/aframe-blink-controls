@@ -170,6 +170,8 @@ AFRAME.registerComponent('blink-controls', {
     this.obj = el.object3D
     this.controllerPosition = new THREE.Vector3()
     this.hitEntityQuaternion = new THREE.Quaternion()
+    // teleportOrigin is headset/camera with look-controls
+    this.teleportOriginQuaternion = new THREE.Quaternion()
     this.hitPoint = new THREE.Vector3()
     this.rigWorldPosition = new THREE.Vector3()
     this.newRigWorldPosition = new THREE.Vector3()
@@ -256,8 +258,13 @@ AFRAME.registerComponent('blink-controls', {
         if (strength > 0.95) {
           this.obj.getWorldPosition(this.controllerPosition)
           this.controllerPosition.setComponent(1, this.hitEntity.object3D.position.y)
+          // TODO: We set hitEntity invisible to prevent rotation glitches
+          // but we could also rotate an invisible object instead and only
+          // apply the final rotation to hitEntity.
+          this.hitEntity.object3D.visible = false
           this.hitEntity.object3D.lookAt(this.controllerPosition)
           this.hitEntity.object3D.rotateY(rotation)
+          this.hitEntity.object3D.visible = true
           this.hitEntity.object3D.getWorldQuaternion(this.hitEntityQuaternion)
         }
         if (Math.abs(evt.detail.x) === 0 && Math.abs(evt.detail.y) === 0) {
@@ -493,8 +500,13 @@ AFRAME.registerComponent('blink-controls', {
       }
       rig.setAttribute('position', newRigLocalPosition)
 
-      // Rotate the rig based on teleport rotation (which is equal to the hitEntity rotation)
-      this.cameraRig.object3D.setRotationFromQuaternion(this.hitEntityQuaternion)
+      // Also take the headset/camera rotation itself into account
+      this.teleportOriginQuaternion
+        .setFromEuler(new THREE.Euler(0, this.teleportOrigin.object3D.rotation.y, 0))
+      this.teleportOriginQuaternion.invert()
+      this.teleportOriginQuaternion.multiply(this.hitEntityQuaternion)
+      // Rotate the rig based on calculated teleport origin rotation
+      this.cameraRig.object3D.setRotationFromQuaternion(this.teleportOriginQuaternion)
 
       // If a rig was not explicitly declared, look for hands and move them proportionally as well
       if (!this.data.cameraRig) {
@@ -628,6 +640,7 @@ AFRAME.registerComponent('blink-controls', {
     cylinder.setAttribute('material', {
       shader: 'flat',
       color: data.hitCylinderColor,
+      opacity: 0.5,
       side: 'double',
       src: this.cylinderTexture,
       transparent: true,
@@ -649,7 +662,7 @@ AFRAME.registerComponent('blink-controls', {
       color: data.hitCylinderColor,
       side: 'double',
       transparent: true,
-      opacity: 0.3,
+      opacity: 0.6,
       depthTest: false
     })
     hitEntity.appendChild(pointer)
