@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>WebXR Application</title>
+        <title>A teleport example with mesh collision</title>
         <link rel="icon" type="image/png" href="favicon.ico"/>
         <meta name="description" content="3D Application">
         <meta charset="utf-8">
@@ -11,12 +11,10 @@
         <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
         <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
         <script type="text/javascript" src="js/webxr.js"></script>
-        <script type="text/javascript" src="js/joystick.js"></script>
-        <script type="text/javascript" src="js/camera-cube-env.js"></script>
         <script type="text/javascript" src="../dist/aframe-blink-controls.js"></script>
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
-    <body onload="init();">
+    <body>
         <a-scene renderer="colorManagement: true; logarithmicDepthBuffer: true;"   shadow="type: basic; autoUpdate: false;">
             <!-- Assets -->
             <a-assets>
@@ -32,9 +30,7 @@
 			<a-entity id="CubeEntity" light-map-geometry="path: lightmaps/Cube_baked.png; intensity: 1.0" gltf-model="#Cube" scale="1 1 1" position="-0.012803194113075733 14.953046798706055 -0.783664882183075" visible="true" shadow="cast: false" ></a-entity>
 
             <!-- Camera -->
-            <a-entity id="player" 
-                position="0 -0.2 4" 
-            >
+            <a-entity id="player" position="0 -0.2 4">
                 <a-entity id="camera" 
                     camera="near: 0.001; far: 1000;" 
                     position="0 1.7 0"

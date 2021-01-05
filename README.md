@@ -60,6 +60,7 @@ Use the script files directly, for example:
 
 <body>
   <a-scene>
+    <!-- camera rig -->
     <a-entity id="player">
       <!-- camera -->
       <a-entity id="camera" camera wasd-controls look-controls></a-entity>
