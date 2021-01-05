@@ -1,6 +1,6 @@
 {
   "name": "aframe-blink-controls",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Blink controls component for A-Frame.",
   "main": "src/index.js",
   "unpkg": "dist/aframe-blink-controls.min.js",
