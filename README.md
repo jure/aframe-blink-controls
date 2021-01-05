@@ -4,7 +4,7 @@
 
 ## [Live examples](https://jure.github.io/aframe-blink-controls)
 
-## [Video demo](https://twitter.com/JureTriglav/status/1339199724520435718?s=20)
+## [Video demo](https://twitter.com/JureTriglav/status/1346502092282847234?s=20)
 
 This component adds teleport with rotation to A-Frame applications! It's a modified version of the [`aframe-teleport-controls`](https://github.com/fernandojsg/aframe-teleport-controls) component by @fernandojsg, and the main changes are: 
 * added support for rotation, 
