@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Teleport example with terrain</title>
+        <link rel="icon" type="image/png" href="favicon.ico"/>
+        <meta name="description" content="3D Application">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://aframe.io/releases/1.1.0/aframe.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+        <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
+        <script type="text/javascript" src="js/webxr.js"></script>
+        <script type="text/javascript" src="../dist/aframe-blink-controls.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <a-scene fog="type: linear; color: #AAA" background renderer="colorManagement: true; logarithmicDepthBuffer: true;"   shadow="type: basic; autoUpdate: false;">
+            <!-- Assets -->
+            <a-assets>
+				<a-asset-item id="Cylinder" src="./assets/Cylinder.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.001" src="./assets/Cylinder.001.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.002" src="./assets/Cylinder.002.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.003" src="./assets/Cylinder.003.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.004" src="./assets/Cylinder.004.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.005" src="./assets/Cylinder.005.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.006" src="./assets/Cylinder.006.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.007" src="./assets/Cylinder.007.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.008" src="./assets/Cylinder.008.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.009" src="./assets/Cylinder.009.gltf"></a-asset-item>
+                <a-asset-item id="Cylinder.010" src="./assets/Cylinder.010.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.011" src="./assets/Cylinder.011.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.012" src="./assets/Cylinder.012.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.013" src="./assets/Cylinder.013.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.014" src="./assets/Cylinder.014.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.015" src="./assets/Cylinder.015.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.016" src="./assets/Cylinder.016.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.017" src="./assets/Cylinder.017.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.018" src="./assets/Cylinder.018.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.019" src="./assets/Cylinder.019.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.020" src="./assets/Cylinder.020.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.021" src="./assets/Cylinder.021.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.022" src="./assets/Cylinder.022.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.023" src="./assets/Cylinder.023.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.024" src="./assets/Cylinder.024.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.025" src="./assets/Cylinder.025.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.026" src="./assets/Cylinder.026.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.027" src="./assets/Cylinder.027.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.028" src="./assets/Cylinder.028.gltf"></a-asset-item>
+				<a-asset-item id="Cylinder.029" src="./assets/Cylinder.029.gltf"></a-asset-item>
+				<a-asset-item id="Plane.001" src="./assets/Plane.001.gltf"></a-asset-item>
+				<a-asset-item id="Plane.002" src="./assets/Plane.002.gltf"></a-asset-item>
+                <a-asset-item id="Plane" src="./assets/Plane.gltf"></a-asset-item>
+	
+            </a-assets>
+
+            <!-- Entities -->
+            <a-entity environment="skyType: atmosphere; lightPosition: -0.55 0.072 -0.56; ground: none; groundColor: black; lighting: none;"></a-entity>
+            <a-entity class="collision" id="#Cylinder" light-map-geometry="path: lightmaps/Cylinder_baked.png; intensity: 0.3" gltf-model="#Cylinder" scale="1 1 1" position="7.9427266120910645 1.9869256019592285 -9.458515167236328" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity class="collision" id="#Cylinder.001" light-map-geometry="path: lightmaps/Cylinder.001_baked.png; intensity: 0.3" gltf-model="#Cylinder.001" scale="1 1 1" position="12.49008846282959 2.1319398880004883 -3.577258825302124" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity class="collision" id="#Cylinder.002" light-map-geometry="path: lightmaps/Cylinder.002_baked.png; intensity: 0.3" gltf-model="#Cylinder.002" scale="1 1 1" position="13.399560928344727 3.7708868980407715 2.9103124141693115" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity class="collision" id="#Cylinder.003" light-map-geometry="path: lightmaps/Cylinder.003_baked.png; intensity: 0.3" gltf-model="#Cylinder.003" scale="1 1 1" position="10.307353973388672 4.752131462097168 8.670305252075195" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity class="collision" id="#Cylinder.004" light-map-geometry="path: lightmaps/Cylinder.004_baked.png; intensity: 0.3" gltf-model="#Cylinder.004" scale="1 1 1" position="3.6985199451446533 5.901228904724121 12.490090370178223" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity class="collision" id="#Cylinder.005" light-map-geometry="path: lightmaps/Cylinder.005_baked.png; intensity: 0.3" gltf-model="#Cylinder.005" scale="1 1 1" position="-4.24420690536499 9.226261138916016 10.307355880737305" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity class="collision" id="#Cylinder.006" light-map-geometry="path: lightmaps/Cylinder.006_baked.png; intensity: 0.3" gltf-model="#Cylinder.006" scale="1 1 1" position="-10.97430419921875 16.779747009277344 13.581457138061523" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity class="collision" id="#Cylinder.007" light-map-geometry="path: lightmaps/Cylinder.007_baked.png; intensity: 0.3" gltf-model="#Cylinder.007" scale="1 1 1" position="-15.703561782836914 20.053924560546875 8.834959030151367" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity class="collision" id="#Cylinder.008" light-map-geometry="path: lightmaps/Cylinder.008_baked.png; intensity: 0.3" gltf-model="#Cylinder.008" scale="1 1 1" position="-14.469489097595215 21.968177795410156 -1.1673985719680786" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity class="collision" id="#Cylinder.009" light-map-geometry="path: lightmaps/Cylinder.009_baked.png; intensity: 0.3" gltf-model="#Cylinder.009" scale="1 1 1" position="-16.210126876831055 22.779233932495117 -2.7998263835906982" visible="true" shadow="cast: false" ></a-entity>
+            
+            <a-entity id="#Cylinder.010" light-map-geometry="path: lightmaps/Cylinder.010_baked.png; intensity: 0.3" gltf-model="#Cylinder.010" scale="1 1 1" position="-17.063232421875 24.606182098388672 -2.935720682144165" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.011" light-map-geometry="path: lightmaps/Cylinder.011_baked.png; intensity: 0.3" gltf-model="#Cylinder.011" scale="1 1 1" position="-16.973421096801758 24.53573226928711 -2.8514931201934814" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.012" light-map-geometry="path: lightmaps/Cylinder.012_baked.png; intensity: 0.3" gltf-model="#Cylinder.012" scale="1 1 1" position="-17.03709602355957 24.436962127685547 -2.33540415763855" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.013" light-map-geometry="path: lightmaps/Cylinder.013_baked.png; intensity: 0.3" gltf-model="#Cylinder.013" scale="1 1 1" position="-16.793081283569336 24.26802635192871 -2.090500593185425" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.014" light-map-geometry="path: lightmaps/Cylinder.014_baked.png; intensity: 0.3" gltf-model="#Cylinder.014" scale="1 1 1" position="-16.445831298828125 23.8782901763916 -2.2594335079193115" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.015" light-map-geometry="path: lightmaps/Cylinder.015_baked.png; intensity: 0.3" gltf-model="#Cylinder.015" scale="1 1 1" position="-16.036014556884766 23.706729888916016 -2.14681077003479" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.016" light-map-geometry="path: lightmaps/Cylinder.016_baked.png; intensity: 0.3" gltf-model="#Cylinder.016" scale="1 1 1" position="-15.695019721984863 23.647441864013672 -2.3438994884490967" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.017" light-map-geometry="path: lightmaps/Cylinder.017_baked.png; intensity: 0.3" gltf-model="#Cylinder.017" scale="1 1 1" position="-15.53547191619873 23.59680938720703 -2.641096591949463" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.018" light-map-geometry="path: lightmaps/Cylinder.018_baked.png; intensity: 0.3" gltf-model="#Cylinder.018" scale="1 1 1" position="-15.582396507263184 23.51224708557129 -2.9758338928222656" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.019" light-map-geometry="path: lightmaps/Cylinder.019_baked.png; intensity: 0.3" gltf-model="#Cylinder.019" scale="1 1 1" position="-15.817025184631348 23.504764556884766 -3.279287338256836" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.020" light-map-geometry="path: lightmaps/Cylinder.020_baked.png; intensity: 0.3" gltf-model="#Cylinder.020" scale="1 1 1" position="-17.053367614746094 24.69080352783203 -2.9664580821990967" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.021" light-map-geometry="path: lightmaps/Cylinder.021_baked.png; intensity: 0.3" gltf-model="#Cylinder.021" scale="1 1 1" position="-17.040578842163086 24.691213607788086 -2.9499149322509766" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.022" light-map-geometry="path: lightmaps/Cylinder.022_baked.png; intensity: 0.3" gltf-model="#Cylinder.022" scale="1 1 1" position="-17.03801918029785 24.695823669433594 -2.931666374206543" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.023" light-map-geometry="path: lightmaps/Cylinder.023_baked.png; intensity: 0.3" gltf-model="#Cylinder.023" scale="1 1 1" position="-17.04671859741211 24.698583602905273 -2.915463924407959" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.024" light-map-geometry="path: lightmaps/Cylinder.024_baked.png; intensity: 0.3" gltf-model="#Cylinder.024" scale="1 1 1" position="-17.0653076171875 24.70181655883789 -2.904719829559326" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.025" light-map-geometry="path: lightmaps/Cylinder.025_baked.png; intensity: 0.3" gltf-model="#Cylinder.025" scale="1 1 1" position="-17.087648391723633 24.711170196533203 -2.9108595848083496" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.026" light-map-geometry="path: lightmaps/Cylinder.026_baked.png; intensity: 0.3" gltf-model="#Cylinder.026" scale="1 1 1" position="-17.10658073425293 24.73241424560547 -2.9016497135162354" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.027" light-map-geometry="path: lightmaps/Cylinder.027_baked.png; intensity: 0.3" gltf-model="#Cylinder.027" scale="1 1 1" position="-17.11988067626953 24.74162483215332 -2.915001153945923" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.028" light-map-geometry="path: lightmaps/Cylinder.028_baked.png; intensity: 0.3" gltf-model="#Cylinder.028" scale="1 1 1" position="-17.116411209106445 24.747007369995117 -2.943136215209961" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Cylinder.029" light-map-geometry="path: lightmaps/Cylinder.029_baked.png; intensity: 0.3" gltf-model="#Cylinder.029" scale="1 1 1" position="-17.121305465698242 24.750850677490234 -2.947727918624878" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Plane.001" light-map-geometry="path: lightmaps/Plane.001_baked.png; intensity: 0.3" gltf-model="#Plane.001" scale="1 1 1" position="-16.2310848236084 23.58228874206543 -2.788820266723633" visible="true" shadow="cast: false" ></a-entity>
+			<a-entity id="#Plane.002" light-map-geometry="path: lightmaps/Plane.002_baked.png; intensity: 0.3" gltf-model="#Plane.002" scale="1 1 1" position="-17.075942993164062 24.695030212402344 -2.9397194385528564" visible="true" shadow="cast: false" ></a-entity>
+            <a-entity class="collision" id="#Plane" light-map-geometry="path: lightmaps/Plane_baked.png; intensity: 0.3" gltf-model="#Plane" scale="1 1 1" position="-0.021471356973052025 3.9321694374084473 0.012034126557409763" visible="true" shadow="cast: false" ></a-entity>
+	
+            <!-- Camera -->
+            <a-entity id="player" position="20 0.7 -20" rotation="0 -180 0">
+                <a-entity id="camera" 
+                    camera="near: 0.001; far: 600;" 
+                    position="0 1.7000000476837158 0" 
+                    
+                    look-controls="pointerLockEnabled: true">
+                        <a-entity id="cursor" cursor="fuse: false;" animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 50; from: 	0.1 0.1 0.1; to: 1 1 1"
+                            position="0 0 -0.1"
+                            geometry="primitive: circle; radius: 0.001;"
+                            material="color: #CCC; shader: flat;"
+                            >
+                        </a-entity>
+                </a-entity>
+                <a-entity id="leftHand" oculus-touch-controls="hand: left" blink-controls="cameraRig: #player; teleportOrigin: #camera; collisionEntities: .collision;" vive-controls="hand: left"></a-entity>
+                <a-entity id="rightHand"  oculus-touch-controls="hand: right" vive-controls="hand: right" ></a-entity>
+            </a-entity>
+
+            <!-- Lights -->
+            <a-entity light="intensity: 0.0; castShadow: false;"></a-entity>
+            <a-entity light="type: ambient; intensity: 0.0"></a-entity>
+
+        </a-scene>
+        <script type="text/javascript">
+            // Makes it so that the sky sphere is closed all around
+            document.querySelector('a-scene').addEventListener('loaded', function () {
+                document.querySelector('a-sky').setAttribute('theta-length', 200)
+            })
+
+            // If the player teleports to a specific location, reposition player back to the start :)
+            document.querySelector('#player').addEventListener('teleported', function (evt) {
+                if(evt.detail.newPosition.distanceTo(new THREE.Vector3(-16.254045402858738, 23.23, -2.610414096493286)) < 1.0) {
+                    document.querySelector('#player').setAttribute('position', '20 0.7 -20')
+                }
+            })
+        </script>
+    </body>
+</html>
