@@ -2,3 +2,6 @@ docs/
 debug/
 node_modules/
 npm-debug.log
+blink-logo.*
+.eslintrc.js
+webpack.config.js
