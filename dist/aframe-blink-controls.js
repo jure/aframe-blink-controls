@@ -184,8 +184,6 @@ AFRAME.registerComponent('blink-controls', {
 
     this.hit = false
     this.prevCheckTime = undefined
-    // this.prevHitHeight = 0
-    // this.prevPosition = new THREE.Vector3()
     this.referenceNormal = new THREE.Vector3()
     this.curveMissColor = new THREE.Color()
     this.curveHitColor = new THREE.Color()
