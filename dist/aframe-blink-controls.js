@@ -184,7 +184,8 @@ AFRAME.registerComponent('blink-controls', {
 
     this.hit = false
     this.prevCheckTime = undefined
-    this.prevHitHeight = 0
+    // this.prevHitHeight = 0
+    // this.prevPosition = new THREE.Vector3()
     this.referenceNormal = new THREE.Vector3()
     this.curveMissColor = new THREE.Color()
     this.curveHitColor = new THREE.Color()
@@ -461,7 +462,6 @@ AFRAME.registerComponent('blink-controls', {
    * Jump!
    */
   onButtonUp: (function () {
-    const teleportOriginWorldPosition = new THREE.Vector3()
     const newRigLocalPosition = new THREE.Vector3()
     const newHandPosition = [new THREE.Vector3(), new THREE.Vector3()] // Left and right
     const handPosition = new THREE.Vector3()
@@ -475,23 +475,13 @@ AFRAME.registerComponent('blink-controls', {
       this.teleportEntity.setAttribute('visible', false)
 
       if (!this.hit) {
-        // Button released but not hit point
+        // Button released but no hit point
         return
       }
 
       const rig = this.data.cameraRig || this.el.sceneEl.camera.el
       rig.object3D.getWorldPosition(this.rigWorldPosition)
       this.newRigWorldPosition.copy(this.hitPoint)
-
-      // If a teleportOrigin exists, offset the rig such that the teleportOrigin is above the hitPoint
-      if (this.teleportOrigin) {
-        this.teleportOrigin.object3D.getWorldPosition(teleportOriginWorldPosition)
-        this.newRigWorldPosition.sub(teleportOriginWorldPosition).add(this.rigWorldPosition)
-      }
-
-      // Always keep the rig at the same offset off the ground after teleporting
-      this.newRigWorldPosition.y = this.rigWorldPosition.y + this.hitPoint.y - this.prevHitHeight
-      this.prevHitHeight = this.hitPoint.y
 
       // Finally update the rigs position
       newRigLocalPosition.copy(this.newRigWorldPosition)
