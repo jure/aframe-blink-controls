@@ -83,6 +83,8 @@ AFRAME.registerComponent('blink-controls', {
     // teleportOrigin is headset/camera with look-controls
     this.teleportOriginQuaternion = new THREE.Quaternion()
     this.hitPoint = new THREE.Vector3()
+    this.collisionObjectNormalMatrix = new THREE.Matrix3()
+    this.collisionWorldNormal = new THREE.Vector3()
     this.rigWorldPosition = new THREE.Vector3()
     this.newRigWorldPosition = new THREE.Vector3()
     this.teleportEventDetail = {
@@ -447,7 +449,7 @@ AFRAME.registerComponent('blink-controls', {
 
     const intersects = this.raycaster.intersectObjects(meshes, true)
     if (intersects.length > 0 && !this.hit &&
-        this.isValidNormalsAngle(intersects[0].face.normal)) {
+        this.isValidNormalsAngle(intersects[0].face.normal, intersects[0].object)) {
       const point = intersects[0].point
 
       this.line.material.color.set(this.curveHitColor)
@@ -470,8 +472,11 @@ AFRAME.registerComponent('blink-controls', {
     }
   },
 
-  isValidNormalsAngle: function (collisionNormal) {
-    const angleNormals = this.referenceNormal.angleTo(collisionNormal)
+  isValidNormalsAngle: function (collisionNormal, collisionObject) {
+    this.collisionObjectNormalMatrix.getNormalMatrix(collisionObject.matrixWorld)
+    this.collisionWorldNormal.copy(collisionNormal)
+      .applyMatrix3(this.collisionObjectNormalMatrix).normalize()
+    const angleNormals = this.referenceNormal.angleTo(this.collisionWorldNormal)
     return (THREE.Math.RAD2DEG * angleNormals <= this.data.landingMaxAngle)
   },
 
