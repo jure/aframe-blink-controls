@@ -409,14 +409,14 @@ AFRAME.registerComponent('blink-controls', {
       rig.setAttribute('position', newRigLocalPosition)
 
       // Also take the headset/camera rotation itself into account
-      this.teleportOriginQuaternion
-        .setFromEuler(new THREE.Euler(0, this.teleportOrigin.object3D.rotation.y, 0))
-      this.teleportOriginQuaternion.invert()
       if (this.data.rotateOnTeleport) {
+        this.teleportOriginQuaternion
+          .setFromEuler(new THREE.Euler(0, this.teleportOrigin.object3D.rotation.y, 0))
+        this.teleportOriginQuaternion.invert()
         this.teleportOriginQuaternion.multiply(this.hitEntityQuaternion)
+        // Rotate the rig based on calculated teleport origin rotation
+        this.cameraRig.object3D.setRotationFromQuaternion(this.teleportOriginQuaternion)
       }
-      // Rotate the rig based on calculated teleport origin rotation
-      this.cameraRig.object3D.setRotationFromQuaternion(this.teleportOriginQuaternion)
 
       // If a rig was not explicitly declared, look for hands and move them proportionally as well
       if (!this.data.cameraRig) {
