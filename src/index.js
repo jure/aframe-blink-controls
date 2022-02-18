@@ -68,7 +68,8 @@ AFRAME.registerComponent('blink-controls', {
     incrementalDrawMs: { default: 300 },
     missOpacity: { default: 0.8 },
     hitOpacity: { default: 0.8 },
-    snapTurn: { default: true }
+    snapTurn: { default: true },
+    rotateOnTeleport: { default: true }
   },
 
   init: function () {
@@ -226,6 +227,11 @@ AFRAME.registerComponent('blink-controls', {
       this.el.sceneEl.appendChild(this.hitEntity)
     }
     this.hitEntity.setAttribute('visible', false)
+
+    // If it has rotation on teleport disabled hide the arrow indicating the teleportation direction 
+    if (!data.hitEntity) {
+      this.hitEntity.lastElementChild.setAttribute('visible', data.rotateOnTeleport);
+    }
 
     if ('collisionEntities' in diff) { this.queryCollisionEntities() }
   },
@@ -401,12 +407,14 @@ AFRAME.registerComponent('blink-controls', {
       rig.setAttribute('position', newRigLocalPosition)
 
       // Also take the headset/camera rotation itself into account
-      this.teleportOriginQuaternion
-        .setFromEuler(new THREE.Euler(0, this.teleportOrigin.object3D.rotation.y, 0))
-      this.teleportOriginQuaternion.invert()
-      this.teleportOriginQuaternion.multiply(this.hitEntityQuaternion)
-      // Rotate the rig based on calculated teleport origin rotation
-      this.cameraRig.object3D.setRotationFromQuaternion(this.teleportOriginQuaternion)
+      if (this.data.rotateOnTeleport) {
+        this.teleportOriginQuaternion
+          .setFromEuler(new THREE.Euler(0, this.teleportOrigin.object3D.rotation.y, 0))
+        this.teleportOriginQuaternion.invert()
+        this.teleportOriginQuaternion.multiply(this.hitEntityQuaternion)
+        // Rotate the rig based on calculated teleport origin rotation
+        this.cameraRig.object3D.setRotationFromQuaternion(this.teleportOriginQuaternion)
+      }
 
       // If a rig was not explicitly declared, look for hands and move them proportionally as well
       if (!this.data.cameraRig) {
@@ -587,7 +595,7 @@ AFRAME.utils.RayCurve = function (numPoints, width) {
   this.uvs = new Float32Array(numPoints * 2 * 6) // 2 uvs per vertex
   this.width = width
 
-  this.geometry.addAttribute('position', new THREE.BufferAttribute(this.vertices, 3).setDynamic(true))
+  this.geometry.setAttribute('position', new THREE.BufferAttribute(this.vertices, 3).setUsage(THREE.DynamicDrawUsage))
 
   this.material = new THREE.MeshBasicMaterial({
     side: THREE.DoubleSide,
