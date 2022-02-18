@@ -44,6 +44,7 @@ Support for HTC Vive/Valve Index/HP Reverb G2 etc. controllers is only theoretic
 | drawIncrementally | If the ray should be drawn as an animation | true |
 | incrementalDrawMs | How long the ray animation should be | 500 |
 | snapTurn | If left/right thumbstick axis performs a 45 deg rotation | true |
+| rotateOnTeleport | Will rotate player on teleport, facing the direction where the arrow is pointing | true |
 
 ### Usage
 
