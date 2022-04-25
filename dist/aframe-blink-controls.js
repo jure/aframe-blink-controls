@@ -50,6 +50,8 @@ AFRAME.registerComponent('blink-controls', {
     // The default teleport de-activation is a centered thumbstick axis,
     // but this can be changed with endEvents.
     endEvents: { type: 'array', default: [] },
+    // Not assigned by default
+    cancelEvents: { type: 'array', default: [] },
     collisionEntities: { default: '' },
     hitEntity: { type: 'selector' },
     cameraRig: { type: 'selector', default: '#player' },
@@ -114,6 +116,7 @@ AFRAME.registerComponent('blink-controls', {
 
     this.onButtonDown = this.onButtonDown.bind(this)
     this.onButtonUp = this.onButtonUp.bind(this)
+    this.cancel = this.cancel.bind(this)
     this.handleThumbstickAxis = this.handleThumbstickAxis.bind(this)
 
     this.teleportOrigin = this.data.teleportOrigin
@@ -137,6 +140,10 @@ AFRAME.registerComponent('blink-controls', {
     // If none of the above, default to thumbstick-axis based activation
     } else {
       this.thumbstickAxisActivation = true
+    }
+    
+    for (i = 0; i < this.data.cancelEvents.length; i++) {
+      el.addEventListener(this.data.cancelEvents[i], this.cancel)
     }
 
     el.addEventListener('thumbstickmoved', this.handleThumbstickAxis)
@@ -434,6 +441,12 @@ AFRAME.registerComponent('blink-controls', {
       this.el.emit('teleported', this.teleportEventDetail)
     }
   })(),
+
+  cancel: function () {
+    this.active = false
+    this.hitEntity.setAttribute('visible', false)
+    this.teleportEntity.setAttribute('visible', false)
+  },
 
   /**
    * Check for raycaster intersection.

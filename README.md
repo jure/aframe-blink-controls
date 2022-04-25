@@ -27,6 +27,7 @@ Support for HTC Vive/Valve Index/HP Reverb G2 etc. controllers is only theoretic
 | collisionEntities | Selector of the meshes used to check the collisions. If no value provided a plane y = 0 is used |  |
 | startEvents | Alternative to `button`, list of events to start teleporting.| [] |
 | endEvents | Paired with `startEvents`, list of events to end teleporting.| []            |
+| cancelEvents | Events to cancel teleporting. | []            |
 | button       | Button used to launch the teleport: trackpad, trigger, grip, menu, thumbstick         |  |
 | hitEntity | Entity used to show at the hitting position. If no value provided a cylinder will be used as default. |           |
 | hitCylinderColor | Color used for the default `hitEntity` primitives | #4d93fd          |
