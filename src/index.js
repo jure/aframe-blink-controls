@@ -122,17 +122,22 @@ AFRAME.registerComponent('blink-controls', {
 
     this.snapturnRotation = THREE.MathUtils.degToRad(45)
     this.canSnapturn = true
+    this.addedEvents = [];
 
     // Are startEvents and endEvents specified?
     if (this.data.startEvents.length && this.data.endEvents.length) {
       for (i = 0; i < this.data.startEvents.length; i++) {
+        this.addedEvents.push([this.data.startEvents[i], this.onButtonDown])
         el.addEventListener(this.data.startEvents[i], this.onButtonDown)
       }
       for (i = 0; i < this.data.endEvents.length; i++) {
+        this.addedEvents.push([this.data.endEvents[i], this.onButtonUp])
         el.addEventListener(this.data.endEvents[i], this.onButtonUp)
       }
     // Is a button for activation specified?
     } else if (data.button) {
+      this.addedEvents.push([data.button + 'down', this.onButtonDown])
+      this.addedEvents.push([data.button + 'up', this.onButtonUp])
       el.addEventListener(data.button + 'down', this.onButtonDown)
       el.addEventListener(data.button + 'up', this.onButtonUp)
     // If none of the above, default to thumbstick-axis based activation
@@ -141,9 +146,11 @@ AFRAME.registerComponent('blink-controls', {
     }
     
     for (i = 0; i < this.data.cancelEvents.length; i++) {
+      this.addedEvents.push([this.data.cancelEvents[i], this.cancel])
       el.addEventListener(this.data.cancelEvents[i], this.cancel)
     }
 
+    this.addedEvents.push(['thumbstickmoved', this.handleThumbstickAxis])
     el.addEventListener('thumbstickmoved', this.handleThumbstickAxis)
     this.queryCollisionEntities()
   },
@@ -253,6 +260,11 @@ AFRAME.registerComponent('blink-controls', {
 
     el.sceneEl.removeEventListener('child-attached', this.childAttachHandler)
     el.sceneEl.removeEventListener('child-detached', this.childDetachHandler)
+
+    // Clean up event listeners if component removed but element isn't
+    for (const [name, fn] of this.addedEvents) {
+      el.removeEventListener(name, fn);
+    }
   },
 
   tick: (function () {
