@@ -50,6 +50,8 @@ AFRAME.registerComponent('blink-controls', {
     // The default teleport de-activation is a centered thumbstick axis,
     // but this can be changed with endEvents.
     endEvents: { type: 'array', default: [] },
+    // Not assigned by default
+    cancelEvents: { type: 'array', default: [] },
     collisionEntities: { default: '' },
     hitEntity: { type: 'selector' },
     cameraRig: { type: 'selector', default: '#player' },
@@ -114,6 +116,7 @@ AFRAME.registerComponent('blink-controls', {
 
     this.onButtonDown = this.onButtonDown.bind(this)
     this.onButtonUp = this.onButtonUp.bind(this)
+    this.cancel = this.cancel.bind(this)
     this.handleThumbstickAxis = this.handleThumbstickAxis.bind(this)
 
     this.teleportOrigin = this.data.teleportOrigin
@@ -121,24 +124,35 @@ AFRAME.registerComponent('blink-controls', {
 
     this.snapturnRotation = THREE.MathUtils.degToRad(45)
     this.canSnapturn = true
+    this.addedEvents = [];
 
     // Are startEvents and endEvents specified?
     if (this.data.startEvents.length && this.data.endEvents.length) {
       for (i = 0; i < this.data.startEvents.length; i++) {
+        this.addedEvents.push([this.data.startEvents[i], this.onButtonDown])
         el.addEventListener(this.data.startEvents[i], this.onButtonDown)
       }
       for (i = 0; i < this.data.endEvents.length; i++) {
+        this.addedEvents.push([this.data.endEvents[i], this.onButtonUp])
         el.addEventListener(this.data.endEvents[i], this.onButtonUp)
       }
     // Is a button for activation specified?
     } else if (data.button) {
+      this.addedEvents.push([data.button + 'down', this.onButtonDown])
+      this.addedEvents.push([data.button + 'up', this.onButtonUp])
       el.addEventListener(data.button + 'down', this.onButtonDown)
       el.addEventListener(data.button + 'up', this.onButtonUp)
     // If none of the above, default to thumbstick-axis based activation
     } else {
       this.thumbstickAxisActivation = true
     }
+    
+    for (i = 0; i < this.data.cancelEvents.length; i++) {
+      this.addedEvents.push([this.data.cancelEvents[i], this.cancel])
+      el.addEventListener(this.data.cancelEvents[i], this.cancel)
+    }
 
+    this.addedEvents.push(['thumbstickmoved', this.handleThumbstickAxis])
     el.addEventListener('thumbstickmoved', this.handleThumbstickAxis)
     this.queryCollisionEntities()
   },
@@ -248,6 +262,11 @@ AFRAME.registerComponent('blink-controls', {
 
     el.sceneEl.removeEventListener('child-attached', this.childAttachHandler)
     el.sceneEl.removeEventListener('child-detached', this.childDetachHandler)
+
+    // Clean up event listeners if component removed but element isn't
+    for (const [name, fn] of this.addedEvents) {
+      el.removeEventListener(name, fn);
+    }
   },
 
   tick: (function () {
@@ -434,6 +453,12 @@ AFRAME.registerComponent('blink-controls', {
       this.el.emit('teleported', this.teleportEventDetail)
     }
   })(),
+
+  cancel: function () {
+    this.active = false
+    this.hitEntity.setAttribute('visible', false)
+    this.teleportEntity.setAttribute('visible', false)
+  },
 
   /**
    * Check for raycaster intersection.

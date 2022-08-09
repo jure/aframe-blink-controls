@@ -105,7 +105,7 @@
                             >
                         </a-entity>
                 </a-entity>
-                <a-entity id="leftHand" oculus-touch-controls="hand: left" blink-controls="cameraRig: #player; teleportOrigin: #camera; collisionEntities: .collision;" vive-controls="hand: left"></a-entity>
+                <a-entity id="leftHand" oculus-touch-controls="hand: left" blink-controls="cameraRig: #player; teleportOrigin: #camera; collisionEntities: .collision; cancelEvents: gripdown, squeeze;" vive-controls="hand: left"></a-entity>
                 <a-entity id="rightHand"  oculus-touch-controls="hand: right" vive-controls="hand: right" ></a-entity>
             </a-entity>
 
