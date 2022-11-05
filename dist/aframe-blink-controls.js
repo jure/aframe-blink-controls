@@ -608,7 +608,7 @@ AFRAME.registerComponent('blink-controls', {
     return hitEntity
   },
   createDefaultPlane: function (size) {
-    const geometry = new THREE.PlaneBufferGeometry(100, 100)
+    const geometry = new THREE.PlaneGeometry(100, 100)
     geometry.rotateX(-Math.PI / 2)
     const material = new THREE.MeshBasicMaterial({ color: 0xffff00 })
     return new THREE.Mesh(geometry, material)
