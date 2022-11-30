@@ -510,7 +510,7 @@ AFRAME.registerComponent('blink-controls', {
     this.collisionWorldNormal.copy(collisionNormal)
       .applyMatrix3(this.collisionObjectNormalMatrix).normalize()
     const angleNormals = this.referenceNormal.angleTo(this.collisionWorldNormal)
-    return (THREE.Math.RAD2DEG * angleNormals <= this.data.landingMaxAngle)
+    return (THREE.MathUtils.RAD2DEG * angleNormals <= this.data.landingMaxAngle)
   },
 
   // Utils
