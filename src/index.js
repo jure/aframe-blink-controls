@@ -160,11 +160,25 @@ AFRAME.registerComponent('blink-controls', {
     // Only do snapturns if axis is very prominent (user intent is clear)
     // And preven further snapturns until axis returns to (close enough to) 0
     if (strength > 0.95) {
+
+      // --- respect roomscale VR camera position (Night_Gryphon)
+      const rigCameraOffset = new THREE.Vector3();
+      this.teleportOrigin.getObject3D('camera').getWorldPosition(rigCameraOffset); // camera pos
+      if (this.cameraRig.object3D.parent) {
+        this.cameraRig.object3D.parent.worldToLocal(rigCameraOffset);
+      }
+      rigCameraOffset.sub(this.cameraRig.object3D.position); // offset relative to parent
+      rigCameraOffset.y = 0;
+
       if (Math.abs(rotation - Math.PI / 2.0) < 0.6) {
+        rigCameraOffset.sub( rigCameraOffset.clone().applyAxisAngle(new THREE.Vector3( 0, 1, 0 ), +this.snapturnRotation) );
         this.cameraRig.object3D.rotateY(+this.snapturnRotation)
+	this.cameraRig.object3D.position.add(rigCameraOffset);
         this.canSnapturn = false
       } else if (Math.abs(rotation - 1.5 * Math.PI) < 0.6) {
+        rigCameraOffset.sub( rigCameraOffset.clone().applyAxisAngle(new THREE.Vector3( 0, 1, 0 ), -this.snapturnRotation) );
         this.cameraRig.object3D.rotateY(-this.snapturnRotation)
+	this.cameraRig.object3D.position.add(rigCameraOffset);
         this.canSnapturn = false
       }
     }
@@ -418,15 +432,9 @@ AFRAME.registerComponent('blink-controls', {
       rig.object3D.getWorldPosition(this.rigWorldPosition)
       this.newRigWorldPosition.copy(this.hitPoint)
 
-      // Finally update the rigs position
-      newRigLocalPosition.copy(this.newRigWorldPosition)
-      if (rig.object3D.parent) {
-        rig.object3D.parent.worldToLocal(newRigLocalPosition)
-      }
-      rig.setAttribute('position', newRigLocalPosition)
-
-      // Also take the headset/camera rotation itself into account
+      // --- Apply teleport rotation
       if (this.data.rotateOnTeleport) {
+        // Also take the headset/camera rotation itself into account
         this.teleportOriginQuaternion
           .setFromEuler(new THREE.Euler(0, this.teleportOrigin.object3D.rotation.y, 0))
         this.teleportOriginQuaternion.invert()
@@ -434,6 +442,20 @@ AFRAME.registerComponent('blink-controls', {
         // Rotate the rig based on calculated teleport origin rotation
         this.cameraRig.object3D.setRotationFromQuaternion(this.teleportOriginQuaternion)
       }
+
+      // --- Adjust roomscale VR camera(origin) offset (Night_Gryphon)
+      const rigCameraOffset = new THREE.Vector3();
+      this.teleportOrigin.getObject3D('camera').getWorldPosition(rigCameraOffset);
+      rigCameraOffset.sub(this.rigWorldPosition);
+      rigCameraOffset.y = 0;
+      this.newRigWorldPosition.sub(rigCameraOffset);
+
+      // Finally update the rigs position
+      newRigLocalPosition.copy(this.newRigWorldPosition)
+      if (rig.object3D.parent) {
+        rig.object3D.parent.worldToLocal(newRigLocalPosition)
+      }
+      rig.setAttribute('position', newRigLocalPosition)
 
       // If a rig was not explicitly declared, look for hands and move them proportionally as well
       if (!this.data.cameraRig) {
