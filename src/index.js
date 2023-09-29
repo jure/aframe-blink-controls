@@ -71,7 +71,9 @@ AFRAME.registerComponent('blink-controls', {
     missOpacity: { default: 0.8 },
     hitOpacity: { default: 0.8 },
     snapTurn: { default: true },
-    rotateOnTeleport: { default: true }
+    rotateOnTeleport: { default: true },
+    teleportationMethod: { default: ""},
+    positionWarpDuration: { default: 1000 }
   },
 
   init: function () {
@@ -423,7 +425,17 @@ AFRAME.registerComponent('blink-controls', {
       if (rig.object3D.parent) {
         rig.object3D.parent.worldToLocal(newRigLocalPosition)
       }
-      rig.setAttribute('position', newRigLocalPosition)
+      
+      if (this.data.teleportationMethod === "position-warp") {
+        rig.setAttribute('animation', {
+          property: 'position',
+          to: `${newRigLocalPosition.x} 0 ${newRigLocalPosition.z}`,
+          easing: 'linear',
+          dur: this.data.positionWarpDuration
+        });
+      } else {
+        rig.setAttribute('position', newRigLocalPosition)
+      }
 
       // Also take the headset/camera rotation itself into account
       if (this.data.rotateOnTeleport) {
@@ -432,7 +444,13 @@ AFRAME.registerComponent('blink-controls', {
         this.teleportOriginQuaternion.invert()
         this.teleportOriginQuaternion.multiply(this.hitEntityQuaternion)
         // Rotate the rig based on calculated teleport origin rotation
-        this.cameraRig.object3D.setRotationFromQuaternion(this.teleportOriginQuaternion)
+        if (this.data.teleportationMethod === "position-warp") {
+          setTimeout(() => {
+            this.cameraRig.object3D.setRotationFromQuaternion(this.teleportOriginQuaternion)
+          }, this.data.positionWarpDuration)
+        } else {
+          this.cameraRig.object3D.setRotationFromQuaternion(this.teleportOriginQuaternion)
+        }
       }
 
       // If a rig was not explicitly declared, look for hands and move them proportionally as well
