@@ -173,12 +173,12 @@ AFRAME.registerComponent('blink-controls', {
       if (Math.abs(rotation - Math.PI / 2.0) < 0.6) {
         rigCameraOffset.sub( rigCameraOffset.clone().applyAxisAngle(new THREE.Vector3( 0, 1, 0 ), +this.snapturnRotation) );
         this.cameraRig.object3D.rotateY(+this.snapturnRotation)
-	this.cameraRig.object3D.position.add(rigCameraOffset);
+        this.cameraRig.object3D.position.add(rigCameraOffset);
         this.canSnapturn = false
       } else if (Math.abs(rotation - 1.5 * Math.PI) < 0.6) {
         rigCameraOffset.sub( rigCameraOffset.clone().applyAxisAngle(new THREE.Vector3( 0, 1, 0 ), -this.snapturnRotation) );
         this.cameraRig.object3D.rotateY(-this.snapturnRotation)
-	this.cameraRig.object3D.position.add(rigCameraOffset);
+        this.cameraRig.object3D.position.add(rigCameraOffset);
         this.canSnapturn = false
       }
     }
